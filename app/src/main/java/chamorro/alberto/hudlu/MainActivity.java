@@ -16,7 +16,12 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView _recyclerView;
     private RecyclerView.Adapter _recyclerViewAdapter;
     private RecyclerView.LayoutManager _recyclerViewLayoutManager;
-
+    private final String[] _dataSet = new String[]{
+            "Adam Gucwa", "Alberto Chamorro", "Chanse Strode", "Craig Zheng",
+            "David Bohner", "Eric Clymer", "Jessica Hoffman", "Jon Evans",
+            "Jordan Degner", "Mitchel Pigsley", "Peter Yasi",
+            "Seth Prauner", "Sue Yi", "Zach Ramaekers", "Mike Isman", "Josh Cox"
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
 
         _recyclerViewLayoutManager = new LinearLayoutManager(this);
         _recyclerView.setLayoutManager(_recyclerViewLayoutManager);
+
+        _recyclerViewAdapter = new MyRecyclerViewAdapter(this, _dataSet);
+        _recyclerView.setAdapter(_recyclerViewAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

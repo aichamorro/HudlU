@@ -11,7 +11,13 @@ import android.widget.TextView;
  * Created by alberto.chamorro on 10/11/15.
  */
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
+
+    public interface MyRecyclerViewInteractionListener {
+        void onItemClicked(View view, int position);
+    }
+
     private String[] _dataSet;
+    private MyRecyclerViewInteractionListener _interactionListener;
 
     public static class ViewHolder extends  RecyclerView.ViewHolder {
         TextView _myTextView;
@@ -25,6 +31,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     public MyRecyclerViewAdapter(Context context, String[] dataSet) {
         _dataSet = dataSet;
+        _interactionListener = (MyRecyclerViewInteractionListener)context;
     }
 
     @Override
@@ -37,8 +44,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder._myTextView.setText(_dataSet[position]);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _interactionListener.onItemClicked(v, position);
+            }
+        });
     }
 
     @Override

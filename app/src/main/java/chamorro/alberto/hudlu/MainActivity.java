@@ -1,9 +1,9 @@
 package chamorro.alberto.hudlu;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.content.pm.PermissionGroupInfo;
+import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,24 +12,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
-import com.android.volley.Cache;
-import com.android.volley.Network;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
-import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,7 +90,9 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
     @Override
     public void onItemClicked(View view, int position) {
-        Snackbar.make(view, _dataSet.get(position).author, Snackbar.LENGTH_SHORT).show();
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(_dataSet.get(position).link));
+
+        startActivity(intent);
     }
 
     void fetchLatestNews() {
@@ -110,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
                     "http://mashable.com/stories.json?hot_per_page=0&new_per_page=5&rising_per_page=0", new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    // TODO Parse the response
                     MashableNews mashableNews = new Gson().fromJson(response, MashableNews.class);
                     _dataSet.addAll(mashableNews.newsItems);
                     _recyclerViewAdapter.notifyDataSetChanged();
@@ -118,13 +113,13 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, "An error occurred when trying to fetch the latest news: " + error.getLocalizedMessage(), 5);
+                    Toast.makeText(context, "An error occurred when trying to fetch the latest news: " + error.getLocalizedMessage(), Toast.LENGTH_SHORT);
                     Log.e("MainActivity", error.getMessage());
                 }
             });
             requestQueue.add(request);
         } else {
-            Toast.makeText(this, "We couldn't connect to the server to fetch the latest news. Please check your internet connection and try again.", 5).show();
+            Toast.makeText(this, "We couldn't connect to the server to fetch the latest news. Please check your internet connection and try again.", Toast.LENGTH_SHORT).show();
         }
     }
 }

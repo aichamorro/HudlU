@@ -100,7 +100,10 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
     void fetchLatestNews() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        final Context context = this;
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
+            Toast.makeText(this, "Fetching latest news", 5).show();
+
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             StringRequest request = new StringRequest(
                     "http://mashable.com/stories.json?hot_per_page=0&new_per_page=5&rising_per_page=0", new Response.Listener<String>() {
@@ -112,11 +115,13 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     // TODO Show an error message and let the user try again
+                    Toast.makeText(context, "An error occurred when trying to fetch the latest news: " + error.getLocalizedMessage(), 5);
+                    Log.e("MainActivity", error.getMessage());
                 }
             });
             requestQueue.add(request);
         } else {
-            Toast.makeText(this, "We couldn't connect to the server to fetch the latest news. Please check your internet connection and try again.", 5);
+            Toast.makeText(this, "We couldn't connect to the server to fetch the latest news. Please check your internet connection and try again.", 5).show();
         }
     }
 }

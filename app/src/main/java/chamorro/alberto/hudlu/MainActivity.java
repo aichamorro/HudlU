@@ -27,19 +27,20 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 import java.security.Permission;
+import java.util.ArrayList;
+import java.util.List;
+
+import chamorro.alberto.hudlu.models.MashableNews;
+import chamorro.alberto.hudlu.models.MashableNewsItem;
 
 public class MainActivity extends AppCompatActivity implements MyRecyclerViewAdapter.MyRecyclerViewInteractionListener {
     private RecyclerView _recyclerView;
     private RecyclerView.Adapter _recyclerViewAdapter;
     private RecyclerView.LayoutManager _recyclerViewLayoutManager;
-    private final String[] _dataSet = new String[]{
-            "Adam Gucwa", "Alberto Chamorro", "Chanse Strode", "Craig Zheng",
-            "David Bohner", "Eric Clymer", "Jessica Hoffman", "Jon Evans",
-            "Jordan Degner", "Mitchel Pigsley", "Peter Yasi",
-            "Seth Prauner", "Sue Yi", "Zach Ramaekers", "Mike Isman", "Josh Cox"
-    };
+    private List<MashableNewsItem> _dataSet = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
     @Override
     public void onItemClicked(View view, int position) {
-        Snackbar.make(view, _dataSet[position], Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(view, _dataSet.get(position).author, Snackbar.LENGTH_SHORT).show();
     }
 
     void fetchLatestNews() {
@@ -110,11 +111,13 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
                 @Override
                 public void onResponse(String response) {
                     // TODO Parse the response
+                    MashableNews mashableNews = new Gson().fromJson(response, MashableNews.class);
+                    _dataSet.addAll(mashableNews.newsItems);
+                    _recyclerViewAdapter.notifyDataSetChanged();
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // TODO Show an error message and let the user try again
                     Toast.makeText(context, "An error occurred when trying to fetch the latest news: " + error.getLocalizedMessage(), 5);
                     Log.e("MainActivity", error.getMessage());
                 }

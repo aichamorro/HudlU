@@ -7,6 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
+import chamorro.alberto.hudlu.models.MashableNewsItem;
+
 /**
  * Created by alberto.chamorro on 10/11/15.
  */
@@ -16,10 +20,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         void onItemClicked(View view, int position);
     }
 
-    private String[] _dataSet;
+    private List<MashableNewsItem> _dataSet;
     private MyRecyclerViewInteractionListener _interactionListener;
 
-    public static class ViewHolder extends  RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView _myTextView;
 
         public ViewHolder(View itemView) {
@@ -29,7 +33,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         }
     }
 
-    public MyRecyclerViewAdapter(Context context, String[] dataSet) {
+    public MyRecyclerViewAdapter(Context context, List<MashableNewsItem> dataSet) {
         _dataSet = dataSet;
         _interactionListener = (MyRecyclerViewInteractionListener)context;
     }
@@ -45,7 +49,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder._myTextView.setText(_dataSet[position]);
+        holder._myTextView.setText(_dataSet.get(position).title);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,7 +60,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     @Override
     public int getItemCount() {
-        return _dataSet.length;
+        return _dataSet.size();
     }
 
 }

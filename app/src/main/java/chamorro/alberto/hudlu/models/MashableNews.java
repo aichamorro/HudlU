@@ -9,5 +9,5 @@ import java.util.List;
  */
 public class MashableNews {
     @SerializedName("new")
-    List<MashableNewsItem> newsItems;
+    public List<MashableNewsItem> newsItems;
 }

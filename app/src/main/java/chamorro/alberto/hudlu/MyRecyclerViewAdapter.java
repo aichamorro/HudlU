@@ -24,12 +24,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private MyRecyclerViewInteractionListener _interactionListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView _myTextView;
+        TextView _titleTextView;
+        TextView _authorTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            _myTextView = (TextView)itemView.findViewById(R.id.item_my_text);
+            _titleTextView = (TextView)itemView.findViewById(R.id.item_title);
+            _authorTextView = (TextView)itemView.findViewById(R.id.item_author);
         }
     }
 
@@ -40,7 +42,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_card_view, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_card_view_2, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(view);
 
@@ -49,7 +51,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder._myTextView.setText(_dataSet.get(position).title);
+        holder._titleTextView.setText(_dataSet.get(position).title);
+        holder._authorTextView.setText(_dataSet.get(position).author);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

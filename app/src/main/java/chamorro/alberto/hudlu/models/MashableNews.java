@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by alberto.chamorro on 17/11/15.
  */
-@SerializedName("new")
 public class MashableNews {
+    @SerializedName("new")
     List<MashableNewsItem> newsItems;
 }

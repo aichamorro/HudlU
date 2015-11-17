@@ -1,5 +1,9 @@
 package chamorro.alberto.hudlu;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.PermissionGroupInfo;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +15,20 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.android.volley.Cache;
+import com.android.volley.Network;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.security.Permission;
 
 public class MainActivity extends AppCompatActivity implements MyRecyclerViewAdapter.MyRecyclerViewInteractionListener {
     private RecyclerView _recyclerView;
@@ -22,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
             "Jordan Degner", "Mitchel Pigsley", "Peter Yasi",
             "Seth Prauner", "Sue Yi", "Zach Ramaekers", "Mike Isman", "Josh Cox"
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
                         .setAction("Action", null).show();
             }
         });
+
+        fetchLatestNews();
     }
 
     @Override
@@ -75,5 +96,27 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     @Override
     public void onItemClicked(View view, int position) {
         Snackbar.make(view, _dataSet[position], Snackbar.LENGTH_SHORT).show();
+    }
+
+    void fetchLatestNews() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            StringRequest request = new StringRequest(
+                    "http://mashable.com/stories.json?hot_per_page=0&new_per_page=5&rising_per_page=0", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    // TODO Parse the response
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // TODO Show an error message and let the user try again
+                }
+            });
+            requestQueue.add(request);
+        } else {
+            Toast.makeText(this, "We couldn't connect to the server to fetch the latest news. Please check your internet connection and try again.", 5);
+        }
     }
 }

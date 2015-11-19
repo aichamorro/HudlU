@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     private RecyclerView.Adapter _recyclerViewAdapter;
     private RecyclerView.LayoutManager _recyclerViewLayoutManager;
     private List<MashableNewsItem> _dataSet = new ArrayList<>();
+    private String _mashableUrlString = "http://mashable.com/stories.json?hot_per_page=0&new_per_page=5&rising_per_page=0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,11 +100,11 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         final Context context = this;
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
-            Toast.makeText(this, "Fetching latest news", 5).show();
+            Toast.makeText(this, R.string.info_fetching_news, Toast.LENGTH_SHORT).show();
 
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             StringRequest request = new StringRequest(
-                    "http://mashable.com/stories.json?hot_per_page=0&new_per_page=5&rising_per_page=0", new Response.Listener<String>() {
+                    _mashableUrlString, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     MashableNews mashableNews = new Gson().fromJson(response, MashableNews.class);
@@ -113,13 +114,13 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, "An error occurred when trying to fetch the latest news: " + error.getLocalizedMessage(), Toast.LENGTH_SHORT);
+                    Toast.makeText(context, R.string.error_fetching_news + error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     Log.e("MainActivity", error.getMessage());
                 }
             });
             requestQueue.add(request);
         } else {
-            Toast.makeText(this, "We couldn't connect to the server to fetch the latest news. Please check your internet connection and try again.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.no_connection_when_fetching_news, Toast.LENGTH_SHORT).show();
         }
     }
 }

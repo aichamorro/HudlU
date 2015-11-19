@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:layout_gravity="center" android:layout_margin="12dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_gravity="center"
+    android:layout_margin="12dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,14 +28,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="TEST" />
+            tools:text="Testing the Header of the card" />
 
         <TextView
             android:id="@+id/item_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="TEST" />
+            tools:text="This is a test of the summary" />
 
     </LinearLayout>
 

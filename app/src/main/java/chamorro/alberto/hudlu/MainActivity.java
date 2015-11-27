@@ -33,6 +33,9 @@ import java.util.List;
 
 import chamorro.alberto.hudlu.models.MashableNews;
 import chamorro.alberto.hudlu.models.MashableNewsItem;
+import chamorro.alberto.hudlu.models.realm.Favorite;
+import chamorro.alberto.hudlu.models.realm.FavoriteUtil;
+import io.realm.Realm;
 
 public class MainActivity extends AppCompatActivity implements MyRecyclerViewAdapter.MyRecyclerViewInteractionListener {
     private RecyclerView _recyclerView;
@@ -125,9 +128,21 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
     @Override
     public void onItemClicked(View view, int position) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(_dataSet.get(position).link));
+        if (view.getId() == R.id.favorite_button) {
+            MashableNewsItem item = _dataSet.get(position);
 
-        startActivity(intent);
+            if (!FavoriteUtil.isFavorite(this, item)) {
+                FavoriteUtil.addFavorite(this, item);
+            } else {
+                FavoriteUtil.removeFavorite(this, item);
+            }
+
+            _recyclerViewAdapter.notifyDataSetChanged();
+        } else {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(_dataSet.get(position).link));
+
+            startActivity(intent);
+        }
     }
 
     void fetchLatestNews() {

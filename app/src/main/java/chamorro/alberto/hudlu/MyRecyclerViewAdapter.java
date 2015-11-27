@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import com.android.volley.toolbox.Volley;
 import java.util.List;
 
 import chamorro.alberto.hudlu.models.MashableNewsItem;
+import chamorro.alberto.hudlu.models.realm.FavoriteUtil;
 
 /**
  * Created by alberto.chamorro on 10/11/15.
@@ -33,11 +35,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private List<MashableNewsItem> _dataSet;
     private MyRecyclerViewInteractionListener _interactionListener;
     private RequestQueue _requestQueue;
+    private Context _context;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView _titleTextView;
         TextView _authorTextView;
         ImageView _imageView;
+        Button _favoriteButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -45,11 +49,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             _titleTextView = (TextView)itemView.findViewById(R.id.item_title);
             _authorTextView = (TextView)itemView.findViewById(R.id.item_author);
             _imageView = (ImageView)itemView.findViewById(R.id.item_image);
+            _favoriteButton = (Button)itemView.findViewById(R.id.favorite_button);
         }
     }
 
     public MyRecyclerViewAdapter(Context context, List<MashableNewsItem> dataSet) {
         _dataSet = dataSet;
+        _context = context;
         _interactionListener = (MyRecyclerViewInteractionListener)context;
         _requestQueue = Volley.newRequestQueue(context);
     }
@@ -81,6 +87,21 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             }
         });
         _requestQueue.add(request);
+
+        holder._favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _interactionListener.onItemClicked(v, position);
+            }
+        });
+
+        if (FavoriteUtil.isFavorite(_context, _dataSet.get(position))) {
+            holder._favoriteButton.setBackgroundColor(_context.getResources().getColor(R.color.colorAccent));
+            holder._favoriteButton.setTextColor(_context.getResources().getColor(R.color.white));
+        } else {
+            holder._favoriteButton.setBackgroundColor(_context.getResources().getColor(R.color.white));
+            holder._favoriteButton.setTextColor(_context.getResources().getColor(R.color.black));
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

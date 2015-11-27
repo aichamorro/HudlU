@@ -4,4 +4,8 @@
     <string name="error_fetching_news">An error occurred when trying to fetch the latest news: </string>
     <string name="no_connection_when_fetching_news">We couldn\'t connect to the server to fetch the latest news. Please check your internet connection and try again.</string>
     <string name="info_fetching_news">Fetching latest news</string>
+    <string name="isFirstRunKey">IsFirstRun</string>
+    <string name="welcome_to_hudlu_application">Welcome to HudlU - Android Development</string>
+    <string name="welcome_to_hudlu_application_title">Welcome</string>
+    <string name="Ok">Ok</string>
 </resources>

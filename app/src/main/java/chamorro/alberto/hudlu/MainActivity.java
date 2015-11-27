@@ -1,7 +1,11 @@
 package chamorro.alberto.hudlu;
 
+import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -63,6 +67,36 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         });
 
         fetchLatestNews();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        showWelcomeDialogIfFirstRun();
+    }
+
+    private void showWelcomeDialogIfFirstRun() {
+        SharedPreferences preferences = getSharedPreferences(ApplicationContext.Configuration.SharedPreferencesName, Context.MODE_PRIVATE);
+        if (!preferences.contains(ApplicationContext.Configuration.IsFirstRunKey)) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(ApplicationContext.Configuration.IsFirstRunKey, new Boolean(true).toString());
+            editor.apply();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setMessage(R.string.welcome_to_hudlu_application)
+                    .setTitle(R.string.welcome_to_hudlu_application_title)
+                    .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 
     @Override

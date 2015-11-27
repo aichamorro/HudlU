@@ -1,5 +1,6 @@
 package chamorro.alberto.hudlu.models.realm;
 
+import chamorro.alberto.hudlu.models.MashableItem;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
@@ -7,7 +8,7 @@ import io.realm.annotations.Required;
 /**
  * Created by alberto.chamorro on 27/11/15.
  */
-public class Favorite extends RealmObject {
+public class Favorite extends RealmObject implements MashableItem {
     @PrimaryKey
     private String link;
 

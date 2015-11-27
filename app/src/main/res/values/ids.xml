@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="favorite_button" type="id">favorite_button</item>
+    <item name="favorites_recyclerView" type="id">FavoritesRecyclerView</item>
 </resources>

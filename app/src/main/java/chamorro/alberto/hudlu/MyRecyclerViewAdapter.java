@@ -20,6 +20,7 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.List;
 
+import chamorro.alberto.hudlu.models.MashableItem;
 import chamorro.alberto.hudlu.models.MashableNewsItem;
 import chamorro.alberto.hudlu.models.realm.FavoriteUtil;
 
@@ -32,7 +33,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         void onItemClicked(View view, int position);
     }
 
-    private List<MashableNewsItem> _dataSet;
+    private List<MashableItem> _dataSet;
     private MyRecyclerViewInteractionListener _interactionListener;
     private RequestQueue _requestQueue;
     private Context _context;
@@ -53,7 +54,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         }
     }
 
-    public MyRecyclerViewAdapter(Context context, List<MashableNewsItem> dataSet) {
+    public MyRecyclerViewAdapter(Context context, List<MashableItem> dataSet) {
         _dataSet = dataSet;
         _context = context;
         _interactionListener = (MyRecyclerViewInteractionListener)context;
@@ -71,11 +72,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder._titleTextView.setText(_dataSet.get(position).title);
-        holder._authorTextView.setText(_dataSet.get(position).author);
+        holder._titleTextView.setText(_dataSet.get(position).getTitle());
+        holder._authorTextView.setText(_dataSet.get(position).getAuthor());
 
         final ViewHolder tmpHolder = holder;
-        ImageRequest request = new ImageRequest(_dataSet.get(position).image, new Response.Listener<Bitmap>() {
+        ImageRequest request = new ImageRequest(_dataSet.get(position).getImage(), new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
                 tmpHolder._imageView.setImageBitmap(response);

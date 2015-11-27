@@ -2,6 +2,7 @@ package chamorro.alberto.hudlu.models.realm;
 
 import android.content.Context;
 
+import chamorro.alberto.hudlu.models.MashableItem;
 import chamorro.alberto.hudlu.models.MashableNewsItem;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -19,17 +20,21 @@ public class FavoriteUtil {
         realm.commitTransaction();
     }
 
-    public static void removeFavorite(Context context, MashableNewsItem newsItem) {
+    public static void removeFavorite(Context context, MashableItem newsItem) {
         Realm realm = Realm.getInstance(context);
         realm.beginTransaction();
-        realm.where(Favorite.class).equalTo("link", newsItem.link).findFirst().removeFromRealm();
+        realm.where(Favorite.class).equalTo("link", newsItem.getLink()).findFirst().removeFromRealm();
         realm.commitTransaction();
     }
 
-    public static boolean isFavorite(Context context, MashableNewsItem newsItem) {
+    public static boolean isFavorite(Context context, MashableItem newsItem) {
+        if (newsItem instanceof Favorite) {
+            return true;
+        }
+
         Realm realm = Realm.getInstance(context);
 
-        return realm.where(Favorite.class).equalTo("link", newsItem.link).count() > 0;
+        return realm.where(Favorite.class).equalTo("link", newsItem.getLink()).count() > 0;
     }
 
     public static RealmResults<Favorite> getAllFavorites(Context context) {

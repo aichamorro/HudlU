@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
+import chamorro.alberto.hudlu.models.MashableItem;
 import chamorro.alberto.hudlu.models.MashableNews;
 import chamorro.alberto.hudlu.models.MashableNewsItem;
 import chamorro.alberto.hudlu.models.realm.Favorite;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     private RecyclerView _recyclerView;
     private RecyclerView.Adapter _recyclerViewAdapter;
     private RecyclerView.LayoutManager _recyclerViewLayoutManager;
-    private List<MashableNewsItem> _dataSet = new ArrayList<>();
+    private List<MashableItem> _dataSet = new ArrayList<>();
     private String _mashableUrlString = "http://mashable.com/stories.json?hot_per_page=0&new_per_page=5&rising_per_page=0";
 
     @Override
@@ -118,7 +119,10 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Log.d("HudlU", "Settings menu item clicked");
+            Log.d("HudlU", "Favorites menu item clicked");
+            Intent intent = new Intent(this, FavoritesActivity.class);
+
+            startActivity(intent);
 
             return true;
         }
@@ -129,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     @Override
     public void onItemClicked(View view, int position) {
         if (view.getId() == R.id.favorite_button) {
-            MashableNewsItem item = _dataSet.get(position);
+            MashableNewsItem item = (MashableNewsItem) _dataSet.get(position);
 
             if (!FavoriteUtil.isFavorite(this, item)) {
                 FavoriteUtil.addFavorite(this, item);
@@ -139,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
             _recyclerViewAdapter.notifyDataSetChanged();
         } else {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(_dataSet.get(position).link));
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(_dataSet.get(position).getLink()));
 
             startActivity(intent);
         }
